@@ -1,4 +1,5 @@
 import scala.Predef.->
+import scala.annotation.tailrec
 
 object Main {
   def main(args: Array[String]): Unit = {
@@ -38,5 +39,31 @@ object Main {
 
     // No Position available
     return None
+  }
+
+  def hasQueenInRow(row: Int, queens: List[(Int, Int)]): Boolean = {
+    queens.foreach(queen => {
+      if (queen._1 == row)
+        return true
+    })
+    return false
+  }
+
+  def hasQueenInColumn(column: Int, queens: List[(Int, Int)]): Boolean = {
+    queens.foreach(queen => {
+      if (queen._2 == column)
+        return true
+    })
+    return false
+  }
+
+  def hasQueenDiagonally(position: (Int, Int), queens: List[(Int, Int)]): Boolean = {
+    queens.foreach(queen => {
+      // Check if queen is diagonally of position
+      // Diagonally when -> x1−x2 = y1−y2, so:
+      if (position._1 - queen._1 == position._2 - queen._2)
+        return true
+    })
+    return false
   }
 }
