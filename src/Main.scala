@@ -33,10 +33,19 @@ object Main {
 
   def getAvailableQueenPosition(currQueens: List[(Int, Int)]): Option[(Int, Int)] = {
     /* TODO */
+    val rows = Range.inclusive(0, 7).toList
+    val columns = Range.inclusive(0, 7).toList
 
     // Position available -> Return Position
-    return Some(1, 1)
-
+    rows.foreach(row => {
+      columns.foreach(column => {
+        if (!hasQueenInRow(row, currQueens)
+          && !hasQueenInColumn(column, currQueens)
+          && !hasQueenDiagonally((column, row), currQueens)
+        )
+          return Some(column, row)
+      })
+    })
     // No Position available
     return None
   }
