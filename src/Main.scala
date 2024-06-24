@@ -1,5 +1,11 @@
+import scala.Predef.->
+
 object Main {
   def main(args: Array[String]): Unit = {
-    println("Hello world!")
+    val queenPositionsList = placeQueens()
+  }
+
+  def placeQueens(): List[List[(Int, Int)]] = {
+    return List()
   }
 }
