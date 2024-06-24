@@ -20,7 +20,10 @@ object Main {
     val availablePosition = getAvailableQueenPosition(currQueens)
 
     availablePosition match {
-      // case None  => /* TODO */
+      case None => {
+        /* TODO */
+        return currQueens
+      }
       case Some(position) => {
         // New list with queen
         val newQueens = position :: currQueens
@@ -52,7 +55,7 @@ object Main {
 
   def hasQueenInRow(row: Int, queens: List[(Int, Int)]): Boolean = {
     queens.foreach(queen => {
-      if (queen._1 == row)
+      if (queen._2 == row)
         return true
     })
     return false
@@ -60,7 +63,7 @@ object Main {
 
   def hasQueenInColumn(column: Int, queens: List[(Int, Int)]): Boolean = {
     queens.foreach(queen => {
-      if (queen._2 == column)
+      if (queen._1 == column)
         return true
     })
     return false
@@ -70,9 +73,16 @@ object Main {
     queens.foreach(queen => {
       // Check if queen is diagonally of position
       // Diagonally when -> x1−x2 = y1−y2, so:
-      if (position._1 - queen._1 == position._2 - queen._2)
+      if (norm(position._1 - queen._1) == norm(position._2 - queen._2))
         return true
     })
     return false
+  }
+
+  def norm(number: Int) = {
+    if (number >= 0)
+      number
+    else
+      number * -1
   }
 }
