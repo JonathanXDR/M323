@@ -1,6 +1,24 @@
 import scala.Predef.->
 import scala.annotation.tailrec
 
+
+// The play field gets handled as follow:
+//
+//              COLUMN
+//      0  1  2  3  4  5  6  7
+//      -------------------------
+//    0 | x
+//    1 |     x
+// R  2 |
+// O  3 |        x
+// W  4 |
+//    5 |
+//    6 |
+//    7 |
+//
+// Coordinates -> (Column, Row)
+//             -> (  X   ,  Y )
+
 object Main {
   def main(args: Array[String]): Unit = {
     val queenPositionsList = placeQueens()
