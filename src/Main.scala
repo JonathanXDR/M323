@@ -1,3 +1,4 @@
+import scala.::
 import scala.Predef.->
 import scala.annotation.tailrec
 
@@ -22,38 +23,39 @@ import scala.annotation.tailrec
 object Main {
   def main(args: Array[String]): Unit = {
     val queenPositionsList = getAllPossibleFields()
+    val a = 0
   }
 
   def getAllPossibleFields(): List[List[(Int, Int)]] = {
     /* TODO  */
-    val firstField = createField(List())
+    val firstField = createField(List(), List())
     return List(firstField)
   }
 
-  def createField(currQueens: List[(Int, Int)]): List[(Int, Int)] = {
+  def createField(currQueens: List[(Int, Int)], invalidPositions: List[(Int, Int)]): List[(Int, Int)] = {
     // Abort Statement
     if (currQueens.length == 8)
       return currQueens
 
     // PlaceQueen
-    val availablePosition = getAvailableQueenPosition(currQueens)
+    val availablePosition = getAvailableQueenPosition(currQueens, invalidPositions)
 
     availablePosition match {
       case None => {
-        /* TODO(If there is no position, repeat the process, but without the last queen) */
-        return currQueens
+        // If there is no position, repeat the process, but without the last queen
+        return createField(currQueens.tail, List(currQueens.head))
       }
       case Some(position) => {
         // New list with queen
         val newQueens = position :: currQueens
 
         // Recursive call with new queen
-        createField(newQueens)
+        return createField(newQueens, List())
       }
     }
   }
 
-  def getAvailableQueenPosition(currQueens: List[(Int, Int)]): Option[(Int, Int)] = {
+  def getAvailableQueenPosition(currQueens: List[(Int, Int)], invalidPositions: List[(Int, Int)]): Option[(Int, Int)] = {
     /* TODO */
     val rows = Range.inclusive(0, 7).toList
     val columns = Range.inclusive(0, 7).toList
@@ -61,7 +63,8 @@ object Main {
     // Position available -> Return Position
     rows.foreach(row => {
       columns.foreach(column => {
-        if (!hasQueenInRow(row, currQueens)
+        if (!invalidPositions.contains((column, row))
+          && !hasQueenInRow(row, currQueens)
           && !hasQueenInColumn(column, currQueens)
           && !hasQueenDiagonally((column, row), currQueens)
         )
