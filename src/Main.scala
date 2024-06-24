@@ -21,15 +21,16 @@ import scala.annotation.tailrec
 
 object Main {
   def main(args: Array[String]): Unit = {
-    val queenPositionsList = placeQueens()
+    val queenPositionsList = getAllPossibleFields()
   }
 
-  def placeQueens(): List[List[(Int, Int)]] = {
+  def getAllPossibleFields(): List[List[(Int, Int)]] = {
     /* TODO  */
-    return List(placeQueen(List()))
+    val firstField = createField(List())
+    return List(firstField)
   }
 
-  def placeQueen(currQueens: List[(Int, Int)]): List[(Int, Int)] = {
+  def createField(currQueens: List[(Int, Int)]): List[(Int, Int)] = {
     // Abort Statement
     if (currQueens.length == 8)
       return currQueens
@@ -39,7 +40,7 @@ object Main {
 
     availablePosition match {
       case None => {
-        /* TODO */
+        /* TODO(If there is no position, repeat the process, but without the last queen) */
         return currQueens
       }
       case Some(position) => {
@@ -47,7 +48,7 @@ object Main {
         val newQueens = position :: currQueens
 
         // Recursive call with new queen
-        placeQueen(newQueens)
+        createField(newQueens)
       }
     }
   }
