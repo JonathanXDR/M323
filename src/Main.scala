@@ -28,48 +28,45 @@ object Main {
 
   def getAllPossibleFields(): List[List[(Int, Int)]] = {
     /* TODO  */
-    val firstField = createField(List(), List())
+    val firstField = getQueens(List())
     return List(firstField)
   }
 
-  def createField(currQueens: List[(Int, Int)], invalidPositions: List[(Int, Int)]): List[(Int, Int)] = {
+  def getQueens(currQueens: List[(Int, Int)], continueFromRow: Int = 0): List[(Int, Int)] = {
     // Abort Statement
     if (currQueens.length == 8)
       return currQueens
 
     // PlaceQueen
-    val availablePosition = getAvailableQueenPosition(currQueens, invalidPositions)
+    val availablePosition = getAvailableQueenPositionInNextColumn(currQueens, continueFromRow)
 
     availablePosition match {
       case None => {
         // If there is no position, repeat the process, but without the last queen
-        return createField(currQueens.tail, List(currQueens.head))
+        return getQueens(currQueens.tail, currQueens.head._2 + 1)
       }
       case Some(position) => {
         // New list with queen
         val newQueens = position :: currQueens
 
         // Recursive call with new queen
-        return createField(newQueens, List())
+        return getQueens(newQueens)
       }
     }
   }
 
-  def getAvailableQueenPosition(currQueens: List[(Int, Int)], invalidPositions: List[(Int, Int)]): Option[(Int, Int)] = {
+  def getAvailableQueenPositionInNextColumn(currQueens: List[(Int, Int)], continueFromRow: Int): Option[(Int, Int)] = {
     /* TODO */
-    val rows = Range.inclusive(0, 7).toList
-    val columns = Range.inclusive(0, 7).toList
+    val rows = Range.inclusive(continueFromRow, 7).toList
+    val nextColumn = if (currQueens.nonEmpty) currQueens.head._1 + 1 else 0
 
     // Position available -> Return Position
     rows.foreach(row => {
-      columns.foreach(column => {
-        if (!invalidPositions.contains((column, row))
-          && !hasQueenInRow(row, currQueens)
-          && !hasQueenInColumn(column, currQueens)
-          && !hasQueenDiagonally((column, row), currQueens)
-        )
-          return Some(column, row)
-      })
+      if (!hasQueenInRow(row, currQueens)
+        && !hasQueenInColumn(nextColumn, currQueens)
+        && !hasQueenDiagonally((nextColumn, row), currQueens)
+      )
+        return Some(nextColumn, row)
     })
     // No Position available
     return None
@@ -83,28 +80,14 @@ object Main {
     return false
   }
 
-  def hasQueenInColumn(column: Int, queens: List[(Int, Int)]): Boolean = {
-    queens.foreach(queen => {
-      if (queen._1 == column)
-        return true
-    })
-    return false
-  }
+  def hasQueenInColumn(column: Int, queens: List[(Int, Int)]): Boolean =
+    queens.exists(_._1 == column)
 
-  def hasQueenDiagonally(position: (Int, Int), queens: List[(Int, Int)]): Boolean = {
-    queens.foreach(queen => {
+
+  def hasQueenDiagonally(position: (Int, Int), queens: List[(Int, Int)]): Boolean =
+    queens.exists(queen =>
       // Check if queen is diagonally of position
       // Diagonally when -> x1−x2 = y1−y2, so:
-      if (norm(position._1 - queen._1) == norm(position._2 - queen._2))
-        return true
-    })
-    return false
-  }
-
-  def norm(number: Int) = {
-    if (number >= 0)
-      number
-    else
-      number * -1
-  }
+      Math.abs(position._1 - queen._1) == Math.abs(position._2 - queen._2)
+    )
 }
