@@ -28,14 +28,19 @@ object Main {
 
   def getAllPossibleFields(): List[List[(Int, Int)]] = {
     /* TODO  */
-    val firstField = getQueens(List())
+    val firstField = getQueens(currQueens = List(), foundSolutions = List())
     return List(firstField)
   }
 
-  def getQueens(currQueens: List[(Int, Int)], continueFromRow: Int = 0): List[(Int, Int)] = {
+  def getQueens(currQueens: List[(Int, Int)], continueFromRow: Int = 0, foundSolutions: List[List[(Int, Int)]]) : List[(Int, Int)] = {
+    /*
     // Abort Statement
-    if (currQueens.length == 8)
+    if (currQueens.length == 8) {
       return currQueens
+    }*/
+
+    val nFoundSolutions = if (currQueens.length == 8) currQueens :: foundSolutions else foundSolutions
+
 
     // PlaceQueen
     val availablePosition = getAvailableQueenPositionInNextColumn(currQueens, continueFromRow)
@@ -43,14 +48,14 @@ object Main {
     availablePosition match {
       case None => {
         // If there is no position, repeat the process, but without the last queen
-        return getQueens(currQueens.tail, currQueens.head._2 + 1)
+        return getQueens(currQueens.tail, currQueens.head._2 + 1, nFoundSolutions)
       }
       case Some(position) => {
         // New list with queen
         val newQueens = position :: currQueens
 
         // Recursive call with new queen
-        return getQueens(newQueens)
+        return getQueens(currQueens = newQueens, foundSolutions = nFoundSolutions)
       }
     }
   }
