@@ -22,22 +22,15 @@ import scala.annotation.tailrec
 
 object Main {
   def main(args: Array[String]): Unit = {
-    val queenPositionsList = getAllPossibleFields()
+    val queenPositionsList = findAllSolutions()
     val a = 0
   }
 
-  def getAllPossibleFields(): List[List[(Int, Int)]] = {
-    /* TODO  */
-    val firstField = getQueens(currQueens = List(), foundSolutions = List())
-    return List(firstField)
-  }
+  def findAllSolutions(): Seq[List[(Int, Int)]] =
+    placeQueens(currQueens = List(), foundSolutions = List())
 
-  def getQueens(currQueens: List[(Int, Int)], continueFromRow: Int = 0, foundSolutions: List[List[(Int, Int)]]) : List[(Int, Int)] = {
-    /*
-    // Abort Statement
-    if (currQueens.length == 8) {
-      return currQueens
-    }*/
+  def placeQueens(currQueens: List[(Int, Int)], continueFromRow: Int = 0, foundSolutions: List[List[(Int, Int)]]): List[List[(Int, Int)]] = {
+
 
     val nFoundSolutions = if (currQueens.length == 8) currQueens :: foundSolutions else foundSolutions
 
@@ -47,21 +40,26 @@ object Main {
 
     availablePosition match {
       case None => {
+        // Abort Statement
+        if (currQueens.isEmpty) {
+          return foundSolutions
+        }
+
+
         // If there is no position, repeat the process, but without the last queen
-        return getQueens(currQueens.tail, currQueens.head._2 + 1, nFoundSolutions)
+        return placeQueens(currQueens.tail, currQueens.head._2 + 1, nFoundSolutions)
       }
       case Some(position) => {
         // New list with queen
         val newQueens = position :: currQueens
 
         // Recursive call with new queen
-        return getQueens(currQueens = newQueens, foundSolutions = nFoundSolutions)
+        return placeQueens(currQueens = newQueens, foundSolutions = nFoundSolutions)
       }
     }
   }
 
   def getAvailableQueenPositionInNextColumn(currQueens: List[(Int, Int)], continueFromRow: Int): Option[(Int, Int)] = {
-    /* TODO */
     val rows = Range.inclusive(continueFromRow, 7).toList
     val nextColumn = if (currQueens.nonEmpty) currQueens.head._1 + 1 else 0
 
