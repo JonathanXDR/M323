@@ -54,7 +54,7 @@ object Main {
         }
 
         // If there is no position, continue the process from the last queen
-        return findQueenSolutions(currQueens.tail, currQueens.head._2 + 1, nFoundSolutions, n)
+        findQueenSolutions(currQueens.tail, currQueens.head._2 + 1, nFoundSolutions, n)
       }
       case Some(position) => {
         // -> Queen can be placed
@@ -63,7 +63,7 @@ object Main {
         val newQueens = position :: currQueens
 
         // Recursive call with new queen
-        return findQueenSolutions(currQueens = newQueens, foundSolutions = nFoundSolutions, n = n)
+        findQueenSolutions(currQueens = newQueens, foundSolutions = nFoundSolutions, n = n)
       }
     }
   }
@@ -88,7 +88,7 @@ object Main {
         return Some(nextColumn, row)
     })
     // No Position available
-    return None
+    None
   }
 
   def hasQueenInRow(row: Int, queens: List[(Int, Int)]): Boolean =
