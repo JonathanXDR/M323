@@ -18,7 +18,13 @@
 
 object Main {
   def main(args: Array[String]): Unit = {
-    val queenPositionsList = findAllSolutions(8)
+    val start = System.currentTimeMillis()
+
+    val queenPositionsList = findAllSolutions(14)
+
+    val end = System.currentTimeMillis()
+    println(s"Execution Time: ${end - start}ms")
+
     printSolutions(queenPositionsList)
   }
 
