@@ -23,9 +23,9 @@ object Main {
   }
 
   def findAllSolutions(): List[List[(Int, Int)]] =
-    placeQueens(currQueens = List(), foundSolutions = List())
+    findQueenSolutions(currQueens = List(), foundSolutions = List())
 
-  def placeQueens(currQueens: List[(Int, Int)], continueFromRow: Int = 0, foundSolutions: List[List[(Int, Int)]]): List[List[(Int, Int)]] = {
+  def findQueenSolutions(currQueens: List[(Int, Int)], continueFromRow: Int = 0, foundSolutions: List[List[(Int, Int)]]): List[List[(Int, Int)]] = {
     // When 8 queens are placed on the same field is that a solution
     val nFoundSolutions = if (currQueens.length == 8) currQueens :: foundSolutions else foundSolutions
 
@@ -42,7 +42,7 @@ object Main {
         }
 
         // If there is no position, continue the process from the last queen
-        return placeQueens(currQueens.tail, currQueens.head._2 + 1, nFoundSolutions)
+        return findQueenSolutions(currQueens.tail, currQueens.head._2 + 1, nFoundSolutions)
       }
       case Some(position) => {
         // -> Queen can be placed
@@ -51,7 +51,7 @@ object Main {
         val newQueens = position :: currQueens
 
         // Recursive call with new queen
-        return placeQueens(currQueens = newQueens, foundSolutions = nFoundSolutions)
+        return findQueenSolutions(currQueens = newQueens, foundSolutions = nFoundSolutions)
       }
     }
   }
