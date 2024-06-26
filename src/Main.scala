@@ -26,26 +26,27 @@ object Main {
     placeQueens(currQueens = List(), foundSolutions = List())
 
   def placeQueens(currQueens: List[(Int, Int)], continueFromRow: Int = 0, foundSolutions: List[List[(Int, Int)]]): List[List[(Int, Int)]] = {
-
-
+    // When 8 queens are placed on the same field is that a solution
     val nFoundSolutions = if (currQueens.length == 8) currQueens :: foundSolutions else foundSolutions
 
-
-    // PlaceQueen
-    val availablePosition = getAvailableQueenPositionInNextColumn(currQueens, continueFromRow)
+    // Try to get a position for a queen in the next column
+    val availablePosition = getNextPosition(currQueens, continueFromRow)
 
     availablePosition match {
       case None => {
+        // -> Queen cant be placed
+
         // Abort Statement
         if (currQueens.isEmpty) {
           return foundSolutions
         }
 
-
-        // If there is no position, repeat the process, but without the last queen
+        // If there is no position, continue the process from the last queen
         return placeQueens(currQueens.tail, currQueens.head._2 + 1, nFoundSolutions)
       }
       case Some(position) => {
+        // -> Queen can be placed
+
         // New list with queen
         val newQueens = position :: currQueens
 
@@ -55,8 +56,15 @@ object Main {
     }
   }
 
-  def getAvailableQueenPositionInNextColumn(currQueens: List[(Int, Int)], continueFromRow: Int): Option[(Int, Int)] = {
-    val rows = Range.inclusive(continueFromRow, 7).toList
+  /**
+   * Get the next available Position of a queen in the next column. The Column gets indicated from the column position of the head element from currQueens increased by 1. If currQueen is empty the column position is 0.
+   *
+   * @param currQueens      The already existing queens where the new Queen should fit in
+   * @param continueFromRow The row where the search should start
+   * @return None if no position is available or the (x, y) of the point.
+   */
+  def getNextPosition(currQueens: List[(Int, Int)], continueFromRow: Int): Option[(Int, Int)] = {
+    val rows = Range.inclusive(continueFromRow, 7)
     val nextColumn = if (currQueens.nonEmpty) currQueens.head._1 + 1 else 0
 
     // Position available -> Return Position
@@ -71,22 +79,16 @@ object Main {
     return None
   }
 
-  def hasQueenInRow(row: Int, queens: List[(Int, Int)]): Boolean = {
-    queens.foreach(queen => {
-      if (queen._2 == row)
-        return true
-    })
-    return false
-  }
+  def hasQueenInRow(row: Int, queens: List[(Int, Int)]): Boolean =
+    queens.exists(_._2 == row)
 
   def hasQueenInColumn(column: Int, queens: List[(Int, Int)]): Boolean =
     queens.exists(_._1 == column)
 
-
   def hasQueenDiagonally(position: (Int, Int), queens: List[(Int, Int)]): Boolean =
     queens.exists(queen =>
       // Check if queen is diagonally of position
-      // Diagonally when -> x1−x2 = y1−y2, so:
+      // Diagonally when -> |x1−x2| = |y1−y2|, so:
       Math.abs(position._1 - queen._1) == Math.abs(position._2 - queen._2)
     )
 
