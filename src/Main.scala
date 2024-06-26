@@ -18,19 +18,26 @@
 
 object Main {
   def main(args: Array[String]): Unit = {
-    val queenPositionsList = findAllSolutions()
+    val queenPositionsList = findAllSolutions(18)
+    println(s"Found ${queenPositionsList.length} solutions")
     printSolutions(queenPositionsList)
   }
 
-  def findAllSolutions(): List[List[(Int, Int)]] =
-    findQueenSolutions(currQueens = List(), foundSolutions = List())
+  /**
+   * Finds all combinations of n queens on a n x n field
+   *
+   * @param n The size of the grid and amount of queens that will be placed on it
+   * @return A list of all possible solutions
+   */
+  def findAllSolutions(n: Int): List[List[(Int, Int)]] =
+    findQueenSolutions(currQueens = List(), foundSolutions = List(), n = n)
 
-  def findQueenSolutions(currQueens: List[(Int, Int)], continueFromRow: Int = 0, foundSolutions: List[List[(Int, Int)]]): List[List[(Int, Int)]] = {
+  def findQueenSolutions(currQueens: List[(Int, Int)], continueFromRow: Int = 0, foundSolutions: List[List[(Int, Int)]], n: Int): List[List[(Int, Int)]] = {
     // When 8 queens are placed on the same field is that a solution
-    val nFoundSolutions = if (currQueens.length == 8) currQueens :: foundSolutions else foundSolutions
+    val nFoundSolutions = if (currQueens.length == n) currQueens :: foundSolutions else foundSolutions
 
     // Try to get a position for a queen in the next column
-    val availablePosition = getNextPosition(currQueens, continueFromRow)
+    val availablePosition = getNextPosition(currQueens, continueFromRow, n)
 
     availablePosition match {
       case None => {
@@ -42,7 +49,7 @@ object Main {
         }
 
         // If there is no position, continue the process from the last queen
-        return findQueenSolutions(currQueens.tail, currQueens.head._2 + 1, nFoundSolutions)
+        return findQueenSolutions(currQueens.tail, currQueens.head._2 + 1, nFoundSolutions, n)
       }
       case Some(position) => {
         // -> Queen can be placed
@@ -51,7 +58,7 @@ object Main {
         val newQueens = position :: currQueens
 
         // Recursive call with new queen
-        return findQueenSolutions(currQueens = newQueens, foundSolutions = nFoundSolutions)
+        return findQueenSolutions(currQueens = newQueens, foundSolutions = nFoundSolutions, n = n)
       }
     }
   }
@@ -63,8 +70,8 @@ object Main {
    * @param continueFromRow The row where the search should start
    * @return None if no position is available or the (x, y) of the point.
    */
-  def getNextPosition(currQueens: List[(Int, Int)], continueFromRow: Int): Option[(Int, Int)] = {
-    val rows = continueFromRow to 7
+  def getNextPosition(currQueens: List[(Int, Int)], continueFromRow: Int, n: Int): Option[(Int, Int)] = {
+    val rows = continueFromRow until n
     val nextColumn = if (currQueens.nonEmpty) currQueens.head._1 + 1 else 0
 
     // Position available -> Return Position
