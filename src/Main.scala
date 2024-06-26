@@ -1,21 +1,17 @@
-import scala.::
-import scala.Predef.->
-import scala.annotation.tailrec
-
-
 // The play field gets handled as follow:
 //
 //              COLUMN
-//      0  1  2  3  4  5  6  7
-//      -------------------------
-//    0 | x
-//    1 |     x
-// R  2 |
-// O  3 |        x
-// W  4 |
-//    5 |
-//    6 |
-//    7 |
+//        0  1  2  3  4  5  6  7
+//      +------------------------+
+//    0 | x (0/0)                |
+//    1 |    x (1/1)             |
+// R  2 |                        |
+// O  3 |       x (2/3)          |
+// W  4 |                        |
+//    5 |                        |
+//    6 |                        |
+//    7 |                        |
+//      +------------------------+
 //
 // Coordinates -> (Column, Row)
 //             -> (  X   ,  Y )
@@ -23,10 +19,10 @@ import scala.annotation.tailrec
 object Main {
   def main(args: Array[String]): Unit = {
     val queenPositionsList = findAllSolutions()
-    val a = 0
+    printSolutions(queenPositionsList)
   }
 
-  def findAllSolutions(): Seq[List[(Int, Int)]] =
+  def findAllSolutions(): List[List[(Int, Int)]] =
     placeQueens(currQueens = List(), foundSolutions = List())
 
   def placeQueens(currQueens: List[(Int, Int)], continueFromRow: Int = 0, foundSolutions: List[List[(Int, Int)]]): List[List[(Int, Int)]] = {
@@ -93,4 +89,8 @@ object Main {
       // Diagonally when -> x1−x2 = y1−y2, so:
       Math.abs(position._1 - queen._1) == Math.abs(position._2 - queen._2)
     )
+
+  def printSolutions(solutions: List[List[(Int, Int)]]): Unit = {
+    /* TODO */
+  }
 }
