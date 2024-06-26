@@ -64,7 +64,7 @@ object Main {
    * @return None if no position is available or the (x, y) of the point.
    */
   def getNextPosition(currQueens: List[(Int, Int)], continueFromRow: Int): Option[(Int, Int)] = {
-    val rows = Range.inclusive(continueFromRow, 7)
+    val rows = continueFromRow to 7
     val nextColumn = if (currQueens.nonEmpty) currQueens.head._1 + 1 else 0
 
     // Position available -> Return Position
@@ -87,7 +87,6 @@ object Main {
 
   def hasQueenDiagonally(position: (Int, Int), queens: List[(Int, Int)]): Boolean =
     queens.exists(queen =>
-      // Check if queen is diagonally of position
       // Diagonally when -> |x1−x2| = |y1−y2|, so:
       Math.abs(position._1 - queen._1) == Math.abs(position._2 - queen._2)
     )
