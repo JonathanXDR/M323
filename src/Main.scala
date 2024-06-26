@@ -18,8 +18,7 @@
 
 object Main {
   def main(args: Array[String]): Unit = {
-    val queenPositionsList = findAllSolutions(18)
-    println(s"Found ${queenPositionsList.length} solutions")
+    val queenPositionsList = findAllSolutions(8)
     printSolutions(queenPositionsList)
   }
 
