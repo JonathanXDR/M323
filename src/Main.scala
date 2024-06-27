@@ -18,14 +18,16 @@
 
 object Main {
   def main(args: Array[String]): Unit = {
+    val n = 8
+
     val start = System.currentTimeMillis()
 
-    val queenPositionsList = findAllSolutions(8)
+    val queenPositionsList = findAllSolutions(n)
 
     val end = System.currentTimeMillis()
     println(s"Execution Time: ${end - start}ms")
 
-    printSolutions(queenPositionsList)
+    printSolutions(queenPositionsList, n)
   }
 
   /**
@@ -106,8 +108,19 @@ object Main {
       Math.abs(position._1 - queen._1) == Math.abs(position._2 - queen._2)
     )
 
-  def printSolutions(solutions: List[List[(Int, Int)]]): Unit = {
-    /* TODO */
-    println(solutions.length)
+  def printSolutions(solutions: List[List[(Int, Int)]], n: Int): Unit = {
+    val rows = 0 until n
+    val columns = 0 until n
+    for (solution <- solutions) {
+      for (row <- rows) {
+        for (column <- columns) {
+          if (solution.contains((column, row)))
+            print(" X ")
+          else print(" . ")
+        }
+        println()
+      }
+      println("-----------------------")
+    }
   }
 }
