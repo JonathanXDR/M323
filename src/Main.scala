@@ -25,9 +25,10 @@ object Main {
     val queenPositionsList = findAllSolutions(n)
 
     val end = System.currentTimeMillis()
-    println(s"Execution Time: ${end - start}ms")
 
     printSolutions(queenPositionsList, n)
+    println(s"Found ${queenPositionsList.length} solutions in ${end - start}ms")
+
   }
 
   /**
