@@ -20,7 +20,7 @@ object Main {
   def main(args: Array[String]): Unit = {
     val start = System.currentTimeMillis()
 
-    val queenPositionsList = findAllSolutions(14)
+    val queenPositionsList = findAllSolutions(8)
 
     val end = System.currentTimeMillis()
     println(s"Execution Time: ${end - start}ms")
@@ -79,16 +79,19 @@ object Main {
     val rows = continueFromRow until n
     val nextColumn = if (currQueens.nonEmpty) currQueens.head._1 + 1 else 0
 
-    // Position available -> Return Position
-    rows.foreach(row => {
-      if (!hasQueenInRow(row, currQueens)
-        && !hasQueenInColumn(nextColumn, currQueens)
-        && !hasQueenDiagonally((nextColumn, row), currQueens)
-      )
-        return Some(nextColumn, row)
+    // Find row that meets requirements
+    val row = rows.find(row => {
+      !hasQueenInRow(row, currQueens) && !hasQueenDiagonally((nextColumn, row), currQueens) && !hasQueenInColumn(nextColumn, currQueens)
     })
-    // No Position available
-    None
+
+    row match {
+      case Some(value) => {
+        // Position available -> Return Position
+        Some(nextColumn, value)
+      }
+      // No position available
+      case None => None
+    }
   }
 
   def hasQueenInRow(row: Int, queens: List[(Int, Int)]): Boolean =
@@ -105,5 +108,6 @@ object Main {
 
   def printSolutions(solutions: List[List[(Int, Int)]]): Unit = {
     /* TODO */
+    println(solutions.length)
   }
 }
