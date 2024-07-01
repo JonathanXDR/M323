@@ -1,3 +1,4 @@
+import scala.reflect.io.Path.extension
 // The play field gets handled as follow:
 //
 //              COLUMN
@@ -20,7 +21,7 @@ object Main {
   def main(args: Array[String]): Unit = {
     /* Could be read out of args */
     val n = 8
-    val solutionsPerRow = 4
+    val solutionsPerRow = 3
 
     val start = System.currentTimeMillis()
 
@@ -138,10 +139,9 @@ object Main {
   }
 
   def zipTogether(lists: List[List[String]]): List[String] = {
-    lists.length match {
-      case 2 => lists.head.zip(lists(1)).map { case (a, b) => s"$a   $b" }
-      case 1 => lists.head
-      case _ => lists.head.zip(zipTogether(lists.tail)).map { case (a, b) => s"$a   $b" }
-    }
+    if (lists.length <= 1)
+      return lists.head
+
+    lists.head.zip(zipTogether(lists.tail)).map { case (a, b) => s"$a   $b" }
   }
 }
