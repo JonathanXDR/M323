@@ -18,17 +18,18 @@
 
 object Main {
   def main(args: Array[String]): Unit = {
+    /* Could be read out of args */
     val n = 8
+    val solutionsPerRow = 4
 
     val start = System.currentTimeMillis()
 
-    val queenPositionsList = findAllSolutions(n)
+    val solutions = findAllSolutions(n)
 
     val end = System.currentTimeMillis()
 
-    printSolutions(queenPositionsList, n)
-    println(s"Found ${queenPositionsList.length} solutions in ${end - start}ms")
-
+    printSolutions(solutions, n, solutionsPerRow)
+    println(s"Found ${solutions.length} solutions in ${end - start}ms")
   }
 
   /**
@@ -109,19 +110,38 @@ object Main {
       Math.abs(position._1 - queen._1) == Math.abs(position._2 - queen._2)
     )
 
-  def printSolutions(solutions: List[List[(Int, Int)]], n: Int): Unit = {
+  def printSolutions(solutions: List[List[(Int, Int)]], n: Int, solutionsInOneRow: Int): Unit = {
     val rows = 0 until n
     val columns = 0 until n
-    for (solution <- solutions) {
-      for (row <- rows) {
-        for (column <- columns) {
-          if (solution.contains((column, row)))
-            print(" X ")
-          else print(" . ")
-        }
+    val outputLines = (for (
+      solution <- solutions
+    ) yield (
+      for (
+        column <- columns
+      ) yield (
+        for (
+          row <- rows
+        ) yield if (solution.contains((column, row))) " X " else " . ").mkString /* Format String using mkString */
+      ).toList)
+    printSolutionRow(outputLines, solutionsInOneRow)
+  }
+
+  def printSolutionRow(lines: List[List[String]], solutionsInOneRow: Int = 0) = {
+    lines.grouped(solutionsInOneRow).toList.map(zipTogether)
+      .foreach(rows => {
+        /* Print Rows */
+        rows.foreach(println)
+
+        /* Print empty Line */
         println()
-      }
-      println("-----------------------")
+      })
+  }
+
+  def zipTogether(lists: List[List[String]]): List[String] = {
+    lists.length match {
+      case 2 => lists.head.zip(lists(1)).map { case (a, b) => s"$a   $b" }
+      case 1 => lists.head
+      case _ => lists.head.zip(zipTogether(lists.tail)).map { case (a, b) => s"$a   $b" }
     }
   }
 }
