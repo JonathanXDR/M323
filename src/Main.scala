@@ -111,6 +111,7 @@ object Main {
       Math.abs(position._1 - queen._1) == Math.abs(position._2 - queen._2)
     )
 
+  // Impure
   def printSolutions(solutions: List[List[(Int, Int)]], n: Int, solutionsInOneRow: Int): Unit = {
     val rows = 0 until n
     val columns = 0 until n
@@ -127,6 +128,7 @@ object Main {
     printSolutionRow(outputLines, solutionsInOneRow)
   }
 
+  // Impure
   def printSolutionRow(lines: List[List[String]], solutionsInOneRow: Int = 0) = {
     lines.grouped(solutionsInOneRow).toList.map(zipTogether)
       .foreach(rows => {
