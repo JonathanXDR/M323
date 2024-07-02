@@ -1,3 +1,4 @@
+import scala.annotation.tailrec
 // The play field gets handled as follow:
 //
 //              COLUMN
@@ -24,7 +25,7 @@ object Main {
 
     val start = System.currentTimeMillis()
 
-    val solutions = findAllSolutions(n)
+    val solutions = findSolutions(n = n)
 
     val end = System.currentTimeMillis()
 
@@ -38,10 +39,9 @@ object Main {
    * @param n The size of the grid and amount of queens that will be placed on it
    * @return A list of all possible solutions
    */
-  def findAllSolutions(n: Int): List[List[(Int, Int)]] =
-    findQueenSolutions(currQueens = List(), foundSolutions = List(), n = n)
 
-  def findQueenSolutions(currQueens: List[(Int, Int)], continueFromRow: Int = 0, foundSolutions: List[List[(Int, Int)]], n: Int): List[List[(Int, Int)]] = {
+  @tailrec
+  def findSolutions(currQueens: List[(Int, Int)] = List(), continueFromRow: Int = 0, foundSolutions: List[List[(Int, Int)]] = List(), n: Int): List[List[(Int, Int)]] = {
     // When 8 queens are placed on the same field is that a solution
     val nFoundSolutions = if (currQueens.length == n) currQueens :: foundSolutions else foundSolutions
 
@@ -58,7 +58,7 @@ object Main {
         }
 
         // If there is no position, continue the process from the last queen
-        findQueenSolutions(currQueens.tail, currQueens.head._2 + 1, nFoundSolutions, n)
+        findSolutions(currQueens.tail, currQueens.head._2 + 1, nFoundSolutions, n)
       }
       case Some(position) => {
         // -> Queen can be placed
@@ -67,7 +67,7 @@ object Main {
         val newQueens = position :: currQueens
 
         // Recursive call with new queen
-        findQueenSolutions(currQueens = newQueens, foundSolutions = nFoundSolutions, n = n)
+        findSolutions(currQueens = newQueens, foundSolutions = nFoundSolutions, n = n)
       }
     }
   }
