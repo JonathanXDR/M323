@@ -1,4 +1,3 @@
-import scala.reflect.io.Path.extension
 // The play field gets handled as follow:
 //
 //              COLUMN
