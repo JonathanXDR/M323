@@ -1,3 +1,5 @@
+import Main.Direction.Direction
+
 import scala.annotation.tailrec
 // The play field gets handled as follow:
 //
@@ -85,7 +87,9 @@ object Main {
 
     // Find row that meets requirements
     val row = rows.find(row => {
-      !hasQueenInRow(row, currQueens) && !hasQueenDiagonally((nextColumn, row), currQueens) && !hasQueenInColumn(nextColumn, currQueens)
+      val hasQueenInRow = hasQueen(Direction.Row, currQueens)
+      val hasQueenInColumn = hasQueen(Direction.Column, currQueens)
+      !hasQueenInRow(row) && !hasQueenDiagonally((nextColumn, row), currQueens) && !hasQueenInColumn(nextColumn)
     })
 
     row match {
@@ -98,11 +102,18 @@ object Main {
     }
   }
 
-  def hasQueenInRow(row: Int, queens: List[(Int, Int)]): Boolean =
-    queens.exists(_._2 == row)
+  object Direction extends Enumeration {
+    type Direction = Value
+    val Row, Column = Value
+  }
 
-  def hasQueenInColumn(column: Int, queens: List[(Int, Int)]): Boolean =
-    queens.exists(_._1 == column)
+  /* Using Currying */
+  def hasQueen(direction: Direction, queens: List[(Int, Int)]): Int => Boolean = { value =>
+    direction match {
+      case Direction.Row => queens.exists(_._2 == value)
+      case Direction.Column => queens.exists(_._1 == value)
+    }
+  }
 
   def hasQueenDiagonally(position: (Int, Int), queens: List[(Int, Int)]): Boolean =
     queens.exists(queen =>
