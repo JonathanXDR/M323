@@ -140,7 +140,7 @@ object Main {
 
   // Impure
   def printSolutionRow(lines: List[List[String]], solutionsInOneRow: Int = 0) = {
-    lines.grouped(solutionsInOneRow).toList.map(zipTogether)
+    lines.grouped(solutionsInOneRow).toList.map(zipAndMapTogether(_, (a) => s"${a._1}   ${a._2}"))
       .foreach(rows => {
         /* Print Rows */
         rows.foreach(println)
@@ -150,6 +150,17 @@ object Main {
       })
   }
 
+  def zipAndMapTogether(lists: List[List[String]], mapOperation: ((String, String)) => String): List[String] = {
+    if (lists.length <= 1)
+      return lists.head
+
+    //noinspection ScalaDeprecation
+    lists.head.zip(zipAndMapTogether(lists.tail, mapOperation)).map(mapOperation)
+  }
+
+  /**
+   * Used Before zipAndMapTogether was created
+   * */
   def zipTogether(lists: List[List[String]]): List[String] = {
     if (lists.length <= 1)
       return lists.head
