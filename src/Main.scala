@@ -157,14 +157,4 @@ object Main {
     //noinspection ScalaDeprecation
     lists.head.zip(zipAndMapTogether(lists.tail, mapOperation)).map(mapOperation)
   }
-
-  /**
-   * Used Before zipAndMapTogether was created
-   * */
-  def zipTogether(lists: List[List[String]]): List[String] = {
-    if (lists.length <= 1)
-      return lists.head
-
-    lists.head.zip(zipTogether(lists.tail)).map { case (a, b) => s"$a   $b" }
-  }
 }
