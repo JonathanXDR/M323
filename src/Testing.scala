@@ -22,7 +22,7 @@ object Testing extends App {
       println("Test failed for valid inputs")
   }
 
-  // Generierter Code
+  // Generated Code
   def testInvalidFindSolutions(): Unit = {
     try {
       findSolutions(n = -1)
